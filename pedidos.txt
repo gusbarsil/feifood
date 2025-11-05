@@ -1,0 +1,1 @@
+{"id": 1, "usuario_id": 1, "usuario_nome": "Gustavo", "alimentos": [{"id": 5, "nome": "Iogurte Natural", "categoria": "Laticínio", "calorias": 59, "preco": 4.2}], "total": 4.2, "status": "Em andamento", "data_criacao": "2025-11-03 01:28:18"}

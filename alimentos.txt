@@ -1,0 +1,5 @@
+{"id": 1, "nome": "Maçã", "categoria": "Fruta", "calorias": 52, "preco": 2.5}
+{"id": 2, "nome": "Pão Integral", "categoria": "Padaria", "calorias": 265, "preco": 1.8}
+{"id": 3, "nome": "Frango Grelhado", "categoria": "Proteína", "calorias": 165, "preco": 12.9}
+{"id": 4, "nome": "Arroz Integral", "categoria": "Grão", "calorias": 112, "preco": 8.5}
+{"id": 5, "nome": "Iogurte Natural", "categoria": "Laticínio", "calorias": 59, "preco": 4.2}
