@@ -2,23 +2,23 @@ import os
 import json
 from datetime import datetime
 
-# Arquivos de dados
+# mapeia txt
 USUARIOS_FILE = "usuarios.txt"
 ALIMENTOS_FILE = "alimentos.txt"
 PEDIDOS_FILE = "pedidos.txt"
 AVALIACOES_FILE = "avaliacoes.txt"
 
-# Usuário logado (declarada globalmente no início)
+# user logado? var global
 usuario_logado = None
 
-# Inicializar arquivos se não existirem
+# inicia arquivos se nao tem no projeto
 def inicializar_arquivos():
     arquivos = [USUARIOS_FILE, ALIMENTOS_FILE, PEDIDOS_FILE, AVALIACOES_FILE]
     for arquivo in arquivos:
         if not os.path.exists(arquivo):
             with open(arquivo, 'w', encoding='utf-8') as f:
                 if arquivo == ALIMENTOS_FILE:
-                    # Adicionar alguns alimentos de exemplo
+                    # lista mercadinho
                     alimentos_exemplo = [
                         {"id": 1, "nome": "Maçã", "categoria": "Fruta", "calorias": 52, "preco": 2.50},
                         {"id": 2, "nome": "Pão Integral", "categoria": "Padaria", "calorias": 265, "preco": 1.80},
@@ -43,7 +43,7 @@ def escrever_arquivo(nome_arquivo, dados):
         for item in dados:
             f.write(json.dumps(item, ensure_ascii=False) + '\n')
 
-# Funcionalidade 1: Cadastrar Novo Usuário
+# cadastrar user
 def cadastrar_usuario():
     print("\n=== CADASTRO DE USUÁRIO ===")
     
@@ -51,7 +51,7 @@ def cadastrar_usuario():
     
     email = input("Digite o email: ").strip()
     
-    # Verificar se email já existe
+    # verfica se ja tem o email no txt usuarios
     for usuario in usuarios:
         if usuario['email'] == email:
             print("❌ Este email já está cadastrado!")
@@ -71,10 +71,10 @@ def cadastrar_usuario():
     usuarios.append(novo_usuario)
     escrever_arquivo(USUARIOS_FILE, usuarios)
     
-    print("✅ Usuário cadastrado com sucesso!")
+    print("✅ Cadastrado com sucesso!")
     return True
 
-# Funcionalidade 2: Login do Usuário
+# logar 
 def login_usuario():
     global usuario_logado
     
@@ -94,7 +94,7 @@ def login_usuario():
     print("❌ Email ou senha incorretos!")
     return False
 
-# Funcionalidade 3: Buscar Alimento
+# buscar alimento
 def buscar_alimento():
     print("\n=== BUSCAR ALIMENTO ===")
     
@@ -120,7 +120,7 @@ def buscar_alimento():
         print("❌ Nenhum alimento encontrado com esse termo.")
         return []
 
-# Funcionalidade 4: Listar informações de alimentos buscados
+# listar informações dos alimentos
 def listar_informacoes_alimentos(alimentos=None):
     if alimentos is None:
         alimentos = ler_arquivo(ALIMENTOS_FILE)
@@ -138,7 +138,7 @@ def listar_informacoes_alimentos(alimentos=None):
         print(f"   Preço: R${alimento['preco']:.2f}")
         print(f"   ID: {alimento['id']}")
 
-# Funcionalidade 5: Cadastrar Pedido (Criar, editar, excluir, adicionar/remover alimentos)
+# cadastrar pedido crud
 def cadastrar_pedido():
     global usuario_logado
     
@@ -204,7 +204,7 @@ def editar_pedido():
             if novo_status:
                 pedido['status'] = novo_status
             
-            # Recalcular total
+            # total
             pedido['total'] = sum(alimento['preco'] for alimento in pedido['alimentos'])
             
             escrever_arquivo(PEDIDOS_FILE, pedidos)
@@ -315,7 +315,7 @@ def listar_meus_pedidos():
         for alimento in pedido['alimentos']:
             print(f"     - {alimento['nome']} (R${alimento['preco']:.2f})")
 
-# Funcionalidade 6: Avaliar Pedido
+# func avaliar pedido
 def avaliar_pedido():
     global usuario_logado
     
@@ -336,7 +336,7 @@ def avaliar_pedido():
     try:
         pedido_id = int(input("\nDigite o ID do pedido que deseja avaliar: "))
         
-        # Verificar se o pedido existe e pertence ao usuário
+        # verificar se o pedido existe e pertence ao usuário
         pedido_avaliar = None
         for pedido in meus_pedidos:
             if pedido['id'] == pedido_id:
@@ -347,14 +347,14 @@ def avaliar_pedido():
             print("❌ Pedido não encontrado ou não está disponível para avaliação!")
             return
         
-        # Verificar se já existe avaliação
+        # verificar se já existe avaliação
         avaliacoes = ler_arquivo(AVALIACOES_FILE)
         for avaliacao in avaliacoes:
             if avaliacao['pedido_id'] == pedido_id:
                 print("❌ Este pedido já foi avaliado!")
                 return
         
-        # Solicitar avaliação
+        # solicitar avaliação
         while True:
             try:
                 estrelas = int(input("Digite a avaliação (0-5 estrelas): "))
@@ -385,7 +385,7 @@ def avaliar_pedido():
     except ValueError:
         print("❌ Digite um ID válido!")
 
-# Função adicional para ver avaliações
+# ver avaliacoes
 def ver_minhas_avaliacoes():
     global usuario_logado
     
@@ -408,7 +408,7 @@ def ver_minhas_avaliacoes():
             print(f"   Comentário: {avaliacao['comentario']}")
         print(f"   Data: {avaliacao['data_avaliacao']}")
 
-# Menu principal
+# menu
 def menu_principal():
     global usuario_logado
     
@@ -473,7 +473,7 @@ def menu_principal():
             else:
                 print("❌ Opção inválida!")
 
-# Função principal
+# inicializar o feifood
 def main():
     inicializar_arquivos()
     print("🚀 Sistema inicializado com sucesso!")
