@@ -11,7 +11,7 @@ AVALIACOES_FILE = "avaliacoes.txt"
 # user logado? var global
 usuario_logado = None
 
-# inicia arquivos se nao tem no projeto
+# inicia arquivos se nao tem no projeto usando o modulo os do proprio python
 def inicializar_arquivos():
     arquivos = [USUARIOS_FILE, ALIMENTOS_FILE, PEDIDOS_FILE, AVALIACOES_FILE]
     for arquivo in arquivos:
@@ -29,7 +29,7 @@ def inicializar_arquivos():
                     for alimento in alimentos_exemplo:
                         f.write(json.dumps(alimento, ensure_ascii=False) + '\n')
 
-# Funções para manipulação de arquivos
+# funcs para manipulacao de arquivos com json
 def ler_arquivo(nome_arquivo):
     try:
         with open(nome_arquivo, 'r', encoding='utf-8') as f:
@@ -43,7 +43,7 @@ def escrever_arquivo(nome_arquivo, dados):
         for item in dados:
             f.write(json.dumps(item, ensure_ascii=False) + '\n')
 
-# cadastrar user
+# cadastrar user, verifica se ja esta cadastrado tbm
 def cadastrar_usuario():
     print("\n=== CADASTRO DE USUÁRIO ===")
     
@@ -132,13 +132,13 @@ def listar_informacoes_alimentos(alimentos=None):
         return
     
     for alimento in alimentos:
-        print(f"\n📋 {alimento['nome'].upper()}")
+        print(f"\n {alimento['nome'].upper()}")
         print(f"   Categoria: {alimento['categoria']}")
         print(f"   Calorias: {alimento['calorias']} kcal")
         print(f"   Preço: R${alimento['preco']:.2f}")
         print(f"   ID: {alimento['id']}")
 
-# cadastrar pedido crud
+# cadastrar pedido "crud"
 def cadastrar_pedido():
     global usuario_logado
     
@@ -224,7 +224,7 @@ def excluir_pedido():
         if pedido['id'] == pedido_id:
             if pedido['usuario_id'] == usuario_logado['id']:
                 pedido_encontrado = True
-                continue  # Não adiciona à lista (exclui)
+                continue  # nao adiciona na lista faz ele ser exluido
             else:
                 print("❌ Você não tem permissão para excluir este pedido!")
                 return
@@ -307,7 +307,7 @@ def listar_meus_pedidos():
     
     print(f"\n=== MEUS PEDIDOS ({len(meus_pedidos)}) ===")
     for pedido in meus_pedidos:
-        print(f"\n📦 Pedido #{pedido['id']}")
+        print(f"\n Pedido #{pedido['id']}")
         print(f"   Status: {pedido['status']}")
         print(f"   Data: {pedido['data_criacao']}")
         print(f"   Total: R${pedido['total']:.2f}")
@@ -324,14 +324,17 @@ def avaliar_pedido():
         return
     
     pedidos = ler_arquivo(PEDIDOS_FILE)
-    meus_pedidos = [p for p in pedidos if p['usuario_id'] == usuario_logado['id'] and p['status'] == 'Entregue']
+    
+    
+    meus_pedidos = [p for p in pedidos if p['usuario_id'] == usuario_logado['id']]
     
     if not meus_pedidos:
-        print("❌ Você não tem pedidos entregues para avaliar!")
+        print("❌ Você não tem pedidos para avaliar!")
         return
     
     print("\n=== AVALIAR PEDIDO ===")
-    listar_meus_pedidos()
+    # lista todos os pedidos do usuário
+    listar_meus_pedidos() 
     
     try:
         pedido_id = int(input("\nDigite o ID do pedido que deseja avaliar: "))
@@ -344,7 +347,8 @@ def avaliar_pedido():
                 break
         
         if not pedido_avaliar:
-            print("❌ Pedido não encontrado ou não está disponível para avaliação!")
+            # Mensagem modificada
+            print("❌ Pedido não encontrado ou não pertence a você!")
             return
         
         # verificar se já existe avaliação
@@ -385,7 +389,7 @@ def avaliar_pedido():
     except ValueError:
         print("❌ Digite um ID válido!")
 
-# ver avaliacoes
+# listar avaliacoes dos pedido do usuario logado 
 def ver_minhas_avaliacoes():
     global usuario_logado
     
@@ -401,24 +405,24 @@ def ver_minhas_avaliacoes():
     
     print(f"\n=== MINHAS AVALIAÇÕES ({len(minhas_avaliacoes)}) ===")
     for avaliacao in minhas_avaliacoes:
-        estrelas = "⭐" * avaliacao['estrelas'] + "☆" * (5 - avaliacao['estrelas'])
-        print(f"\n📝 Pedido #{avaliacao['pedido_id']}")
+        estrelas = "*" * avaliacao['estrelas'] + "" * (5 - avaliacao['estrelas'])
+        print(f"\n Pedido #{avaliacao['pedido_id']}")
         print(f"   Avaliação: {estrelas} ({avaliacao['estrelas']}/5)")
         if avaliacao['comentario']:
             print(f"   Comentário: {avaliacao['comentario']}")
         print(f"   Data: {avaliacao['data_avaliacao']}")
 
-# menu
+# menu principal com todas as opcoes disponiveis
 def menu_principal():
     global usuario_logado
     
     while True:
         print("\n" + "="*40)
-        print("          FEIFOOD - 22.225.029-2")
+        print("         FEIFOOD - 22.225.029-2")
         print("="*40)
         
         if usuario_logado:
-            print(f"👤 Usuário: {usuario_logado['nome']}")
+            print(f"Usuário: {usuario_logado['nome']}")
             print("1. Buscar Alimento")
             print("2. Listar Todos os Alimentos")
             print("3. Gerenciar Pedidos")
@@ -452,7 +456,7 @@ def menu_principal():
                 usuario_logado = None
                 print("✅ Logout realizado com sucesso!")
             elif opcao == "7":
-                print("👋 Obrigado por usar nosso sistema!")
+                print("Obrigado por usar o FEIFOOD!")
                 break
             else:
                 print("❌ Opção inválida!")
@@ -476,7 +480,7 @@ def menu_principal():
 # inicializar o feifood
 def main():
     inicializar_arquivos()
-    print("🚀 Sistema inicializado com sucesso!")
+    print("Iniciando!")
     menu_principal()
 
 if __name__ == "__main__":

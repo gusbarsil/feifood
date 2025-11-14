@@ -1,0 +1,1 @@
+{"id": 1, "pedido_id": 1, "usuario_id": 1, "usuario_nome": "Gustavo", "estrelas": 4, "comentario": "Muito bom!", "data_avaliacao": "2025-11-13 22:51:20"}
